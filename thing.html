@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+
+<script type="text/javascript">
+
+    const normalizedTimes = {
+        "nightEnd": 5*60 + 30,
+        "dawn": 6* 60,
+        "dayStart": 6*60 + 30,
+        "dayEnd": 17 * 60 + 30,
+        "dusk": 18 * 60,
+        "nightStart": 18 * 60 + 30,
+    }
+
+    const skyGradient = {
+        [normalizedTimes.nightEnd]: "#19072e",
+        [normalizedTimes.dawn]: "#f9b1ff",
+        [normalizedTimes.dayStart]: "#33e7ff",
+        [normalizedTimes.dayEnd]: "#33e7ff",
+        [normalizedTimes.dusk]: "#ffea00",
+        [normalizedTimes.nightStart]: "#19072e",
+    }
+
+    const rightCloudGradient = {
+        [normalizedTimes.nightEnd]: "#19072e",
+        [normalizedTimes.dawn]: "#ff5599",
+        [normalizedTimes.dayStart]: "#ffffff",
+        [normalizedTimes.dayEnd]: "#ffffff",
+        [normalizedTimes.dusk]: "#d54815",
+        [normalizedTimes.nightStart]: "#19072e",
+    }
+
+    const leftCloudGradient = {
+        [normalizedTimes.nightEnd]: "#19072e",
+        [normalizedTimes.dawn]: "#ff6600",
+        [normalizedTimes.dayStart]: "#ffffff",
+        [normalizedTimes.dayEnd]: "#ffffff",
+        [normalizedTimes.dusk]: "#5d37d5",
+        [normalizedTimes.nightStart]: "#19072e",
+    }
+
+    function colorToComponents(color) {
+        return [
+            Number("0x" + color.slice(1, 3)),
+            Number("0x" + color.slice(3, 5)),
+            Number("0x" + color.slice(5, 7)),
+        ]
+    }
+
+    function formatHex(value) {
+        return value.toString(16).padStart(2, '0');
+    }
+
+    function componentsToColor(components) {
+        console.log(components);
+        return `#${components.map(formatHex).join('')}`
+    }
+
+    function getWeightedAverageOfComponents(component1, component2, weight) {
+        return Math.round(component1 * (1-weight) + component2 * weight);
+    }
+
+    function getWeightedAverageOfColors(color1, color2, weight) {
+        const components1 = colorToComponents(color1);
+        const components2 = colorToComponents(color2);
+        return componentsToColor(components1.map((c, i) => getWeightedAverageOfComponents(c, components2[i], weight)));
+    }
+
+    function getColorOnGradient(gradient, normalizedTime) {
+        const gradientStops = Object.keys(gradient).map(i => +i);
+        let stopIndex = gradientStops.findIndex(stop => stop > normalizedTime);
+        if (stopIndex === 0) {
+            return gradient[gradientStops[0]];
+        }
+        if (stopIndex === -1) {
+            return gradient[gradientStops[gradientStops.length - 1]];
+        }
+        const stop = gradientStops[stopIndex];
+        const prevStop = gradientStops[stopIndex - 1];
+        const weight = (normalizedTime - prevStop) / (stop - prevStop);
+        return getWeightedAverageOfColors(gradient[prevStop], gradient[stop], weight);
+    }
+
+    let normalizedTime = normalizedTimes.nightEnd;
+    const incrementTime = () => {
+        normalizedTime += 1;
+        console.log("time", normalizedTime);
+        console.log("color", getColorOnGradient(skyGradient, normalizedTime))
+        document.body.style.setProperty('--sky', getColorOnGradient(skyGradient, normalizedTime));
+        document.body.style.setProperty('--right', getColorOnGradient(rightCloudGradient, normalizedTime));
+        document.body.style.setProperty('--left', getColorOnGradient(leftCloudGradient, normalizedTime));
+        document.getElementById("tspan15").innerHTML = `${Math.floor(normalizedTime / 60).toString().padStart(2, "0")}:${(normalizedTime % 60).toString().padStart(2, "0")}`;
+    }
+
+    const incrementor = {
+        stop: () => {},
+        start: () => {
+            const i = setInterval(incrementTime, 100);
+            incrementor.stop = () => clearInterval(i)
+        }
+    }
+
+    document.addEventListener("mousedown", incrementor.start)
+    document.addEventListener("mouseup", () => incrementor.stop())
+</script>
+
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+        width="600"
+        height="400"
+        viewBox="0 0 158.75 105.83333"
+        version="1.1"
+        id="svg1"
+        sodipodi:docname="sky.svg"
+        inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:svg="http://www.w3.org/2000/svg">
+    <style>
+        @font-face {
+            font-family: "SourGummy";
+            src: url("./SourGummy.ttf") format("truetype");
+        }
+    </style>
+    <sodipodi:namedview
+            id="namedview1"
+            pagecolor="#ffffff"
+            bordercolor="#000000"
+            borderopacity="0.25"
+            inkscape:showpageshadow="2"
+            inkscape:pageopacity="0.0"
+            inkscape:pagecheckerboard="0"
+            inkscape:deskcolor="#d1d1d1"
+            inkscape:document-units="mm"
+            inkscape:zoom="2.0792508"
+            inkscape:cx="330.64794"
+            inkscape:cy="178.18918"
+            inkscape:window-width="2560"
+            inkscape:window-height="1406"
+            inkscape:window-x="-11"
+            inkscape:window-y="-11"
+            inkscape:window-maximized="1"
+            inkscape:current-layer="layer1" />
+    <defs
+            id="defs1" />
+    <g
+            inkscape:label="Layer 1"
+            inkscape:groupmode="layer"
+            id="layer1">
+        <rect
+                style="fill:var(--sky, #aaffee);stroke:#000000;stroke-width:0.264583"
+                id="rect15"
+                width="162.24292"
+                height="107.7802"
+                x="-1.0179949"
+                y="-0.89074552"
+                inkscape:label="sky" />
+        <path
+                id="path10"
+                style="fill:var(--right, #ff5599);stroke:var(--sky, #ffffff);stroke-width:1.22124;stroke-dasharray:none;stroke-dashoffset:0"
+                inkscape:transform-center-x="-5.2289008"
+                inkscape:transform-center-y="-9.0733486"
+                d="m 158.56664,43.911426 a 29.624502,17.231277 0 0 0 -29.41065,15.164271 23.647629,15.746935 0 0 0 -2.89895,-0.118986 23.647629,15.746935 0 0 0 -23.15579,12.55285 26.246269,18.005717 0 0 0 -4.300939,-0.24374 26.246269,18.005717 0 0 0 -26.246274,18.005804 26.246269,18.005717 0 0 0 0.546126,3.654522 23.647629,15.746935 0 0 0 -8.148634,-0.964476 23.647629,15.746935 0 0 0 -23.647555,15.747149 23.647629,15.746935 0 0 0 23.647555,15.74663 23.647629,15.746935 0 0 0 23.647555,-15.74663 23.647629,15.746935 0 0 0 -0.01794,-0.61537 l 6.607871,0.0126 h 0.0048 a 26.246269,18.005717 0 0 0 3.606547,0.1714 26.246269,18.005717 0 0 0 3.466718,-0.15778 l 59.09145,0.11427 0.0654,-28.940012 A 29.624502,17.231277 0 0 0 188.191,61.143048 29.624502,17.231277 0 0 0 158.56666,43.911446 Z"
+                inkscape:label="cloudsRight" />
+        <path
+                id="path9"
+                style="
+                  fill:var(--left, #ff6600);
+                  stroke: var(--sky, #ffffff);
+                  stroke-width:1.21695;
+                  stroke-dasharray:none"
+                inkscape:transform-center-x="0.64420689"
+                inkscape:transform-center-y="-10.334806"
+                d="M 4.6488521,29.275125 A 30.344174,25.978084 0 0 0 -25.695262,55.253342 30.344174,25.978084 0 0 0 -1.7177083,80.652632 L -1.910793,107.31842 49.990776,107.1956 h 0.001 a 25.254598,14.087618 0 0 0 8.967709,0.91852 25.254598,14.087618 0 0 0 9.168119,-0.96103 25.254598,14.087618 0 0 0 10e-4,0 l 5.005025,-0.0121 A 16.428375,11.955089 0 0 0 89.561092,118.97043 16.428375,11.955089 0 0 0 105.9895,107.01557 16.428375,11.955089 0 0 0 89.561092,95.060188 16.428375,11.955089 0 0 0 84.021812,95.760359 25.254598,14.087618 0 0 0 84.213851,94.026203 25.254598,14.087618 0 0 0 60.927006,79.981328 23.837251,19.192765 0 0 0 37.183875,62.490712 23.837251,19.192765 0 0 0 33.721956,62.694359 30.344174,25.978084 0 0 0 34.992966,55.253342 30.344174,25.978084 0 0 0 4.6488521,29.275125 Z"
+                inkscape:label="cloudsLeft" />
+        <text
+                xml:space="preserve"
+                style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6278px;font-family:SourGummy;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#FFFFFF;stroke:#00000000;stroke-width:0.764;stroke-dasharray:none;stroke-dashoffset:0"
+                x="43.075424"
+                y="57.904324"
+                id="text15"
+                transform="scale(1.1067535,0.90354356)"><tspan
+         sodipodi:role="line"
+         id="tspan15"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:SourGummy;stroke-width:0.764;stroke-dasharray:none"
+         x="43.075424"
+         y="57.904324">10:34</tspan></text>
+    </g>
+</svg>
+
+</body>
+
+</html>

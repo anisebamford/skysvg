@@ -1,0 +1,13 @@
+@font-face {
+    font-family: "SourGummy";
+    src: url("./SourGummy.ttf") format("truetype");
+}
+
+text {
+    font-family: "SourGummy";
+    color: aliceblue;
+}
+
+svg {
+    background-color: #c7bdff
+}
