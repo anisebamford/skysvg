@@ -57,9 +57,6 @@ def get_color_on_gradient(gradient: dict[int, str], value: int) -> str:
     stop = gradient_stops[stop_index]
     prev_stop = gradient_stops[stop_index - 1]
     weight = (value - prev_stop) / (stop - prev_stop)
-    print(gradient[stop])
-    print(gradient[prev_stop])
-    print(weight)
     return get_weighted_average_of_colors(gradient[prev_stop], gradient[stop], weight)
 
 def test(fn, args, expected):
