@@ -86,3 +86,49 @@ test(format_am_pm, [11*60 + 59], "AM")
 test(format_am_pm, [12*60], "PM")
 test(format_time, [11*60+50], "11:50")
 test(get_color_on_gradient, [{10: "#ffffff", 20: "#000000"}, 15], "#7f7f7f")
+
+
+normalized_times = {
+    "nightEnd": 5*60,
+    "dawn": 6* 60,
+    "dayStart": 7*60,
+    "dayEnd": 17 * 60,
+    "dusk": 18 * 60,
+    "nightStart": 19 * 60,
+}
+
+skyGradient = {
+    normalized_times["nightEnd"]: "#19072e",
+    normalized_times["dawn"]: "#f9b1ff",
+    normalized_times["dayStart"]: "#33e7ff",
+    normalized_times["dayEnd"]: "#33e7ff",
+    normalized_times["dusk"]: "#19072e",
+    normalized_times["nightStart"]: "#19072e",
+}
+
+rightCloudGradient = {
+    normalized_times["nightEnd"]: "#19072e",
+    normalized_times["dawn"]: "#ff5599",
+    normalized_times["dayStart"]: "#ffffff",
+    normalized_times["dayEnd"]: "#ffffff",
+    normalized_times["dusk"]: "#d54815",
+    normalized_times["nightStart"]: "#19072e",
+}
+
+leftCloudGradient = {
+    normalized_times["nightEnd"]: "#19072e",
+    normalized_times["dawn"]: "#ff6600",
+    normalized_times["dayStart"]: "#ffffff",
+    normalized_times["dayEnd"]: "#ffffff",
+    normalized_times["dusk"]: "#5d37d5",
+    normalized_times["nightStart"]: "#19072e",
+}
+
+cloudBorderGradient = {
+    normalized_times["nightEnd"]: "#ffffff",
+    normalized_times["dawn"]: "#ffffff",
+    normalized_times["dayStart"]: "#33e7ff",
+    normalized_times["dayEnd"]: "#33e7ff",
+    normalized_times["dusk"]: "#ffffff",
+    normalized_times["nightStart"]: "#ffffff",
+}
